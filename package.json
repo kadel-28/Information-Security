@@ -1,0 +1,28 @@
+{
+  "name": "algorithm-visualizer",
+  "version": "1.0.0",
+  "description": "Full-stack MERN Algorithm Visualizer",
+  "main": "server/server.js",
+  "engines": {
+    "node": "18.x",
+    "npm": "9.x"
+  },
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "nodemon server/server.js",
+    "install-all": "npm install && cd client && npm install && cd ..",
+    "build": "cd client && npm install && npm run build && cd ..",
+    "server": "cd server && npm install && npm start",
+    "client": "cd client && npm install && npm start",
+    "heroku-postbuild": "cd client && npm install && npm run build"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "mongoose": "^7.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
