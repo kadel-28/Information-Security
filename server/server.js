@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 
@@ -8,13 +9,17 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Serve static files from React build
+const clientBuildPath = path.join(__dirname, '../client/build');
+app.use(express.static(clientBuildPath));
+
 // Routes
 const caesarCipherRoutes = require('./routes/caesarCipherRoutes');
 
 app.use('/api/caesar', caesarCipherRoutes);
 
-// Root route
-app.get('/', (req, res) => {
+// API Root route
+app.get('/api', (req, res) => {
   res.json({
     message: 'Algorithm Visualizer API - MERN Stack',
     version: '1.0.0',
@@ -30,20 +35,17 @@ app.get('/', (req, res) => {
   });
 });
 
+// Serve React app for all other routes
+app.get('*', (req, res) => {
+  res.sendFile(path.join(clientBuildPath, 'index.html'));
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({
     error: 'Something went wrong!',
     message: err.message
-  });
-});
-
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({
-    error: 'Route not found',
-    path: req.path
   });
 });
 
