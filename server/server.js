@@ -11,6 +11,7 @@ app.use(express.json());
 
 // Serve static files from React build
 const clientBuildPath = path.join(__dirname, '../client/build');
+console.log(`📁 Serving static files from: ${clientBuildPath}`);
 app.use(express.static(clientBuildPath));
 
 // Routes
@@ -18,7 +19,7 @@ const caesarCipherRoutes = require('./routes/caesarCipherRoutes');
 
 app.use('/api/caesar', caesarCipherRoutes);
 
-// API Root route
+// API Info endpoint
 app.get('/api', (req, res) => {
   res.json({
     message: 'Algorithm Visualizer API - MERN Stack',
@@ -35,23 +36,20 @@ app.get('/api', (req, res) => {
   });
 });
 
-// Serve React app for all other routes
-app.get('*', (req, res) => {
-  res.sendFile(path.join(clientBuildPath, 'index.html'));
-});
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({
-    error: 'Something went wrong!',
-    message: err.message
+// Catch-all: Serve React app for all requests not matching /api
+app.use((req, res) => {
+  console.log(`📄 Serving React app for request: ${req.path}`);
+  res.sendFile(path.join(clientBuildPath, 'index.html'), (err) => {
+    if (err) {
+      console.error(`Error serving index.html: ${err}`);
+      res.status(500).send('Error loading app');
+    }
   });
 });
 
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV}`);
 });
