@@ -1,16 +1,29 @@
 #!/bin/bash
 set -e
 
-echo "Installing client dependencies..."
+echo "================================"
+echo "Building Algorithm Visualizer"
+echo "================================"
+
+echo ""
+echo "Step 1: Installing client dependencies..."
 cd client
-npm install
+npm install --legacy-peer-deps
 
-echo "Building React app..."
-npm run build
+echo ""
+echo "Step 2: Building React app..."
+CI=false npm run build
+if [ ! -d "build" ]; then
+  echo "❌ Build failed! No build folder created."
+  exit 1
+fi
+echo "✅ React build completed"
 
-echo "Installing server dependencies..."
+echo ""
+echo "Step 3: Installing server dependencies..."
 cd ../server
 npm install
 
-echo "Starting server..."
+echo ""
+echo "Step 4: Starting server..."
 npm start
