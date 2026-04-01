@@ -4,6 +4,7 @@ import axios from 'axios';
 import './CaesarCipherPage.css';
 
 function CaesarCipherPage() {
+  const API_URL = 'https://information-security-comp488.onrender.com';
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('info');
   const [algorithmInfo, setAlgorithmInfo] = useState(null);
@@ -48,7 +49,7 @@ function CaesarCipherPage() {
     const fetchInfo = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('/api/caesar/info');
+        const response = await axios.get(`${API_URL}/api/caesar/info`);
         setAlgorithmInfo(response.data);
       } catch (error) {
         console.error('Error fetching algorithm info:', error);
@@ -78,7 +79,7 @@ function CaesarCipherPage() {
 
     try {
       setLoading(true);
-      const response = await axios.post('/api/caesar/encrypt', {
+      const response = await axios.post(`${API_URL}/api/caesar/encrypt`, {
         plaintext: plaintext,
         shift: parseInt(encryptionShift)
       });
@@ -108,7 +109,7 @@ function CaesarCipherPage() {
 
     try {
       setLoading(true);
-      const response = await axios.post('/api/caesar/decrypt', {
+      const response = await axios.post(`${API_URL}/api/caesar/decrypt`, {
         ciphertext: ciphertext,
         shift: parseInt(decryptionShift)
       });
@@ -138,7 +139,7 @@ function CaesarCipherPage() {
 
     try {
       setBruteforceLoading(true);
-      const response = await axios.post('/api/caesar/bruteforce', {
+      const response = await axios.post(`${API_URL}/api/caesar/bruteforce`, {
         ciphertext: bruteforceCiphertext
       });
       setBruteforceResults(response.data);
